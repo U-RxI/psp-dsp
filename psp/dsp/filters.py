@@ -5,22 +5,22 @@ Created on Wed Jan  3 09:18:32 2024
 @author: ASGRM
 """
 
-
 from scipy.fft import fft
 import numpy as np
 from numpy.typing import NDArray
 from typing import Iterable
 
-def dft(sample : Iterable[float], N : int, harmonic : int = 1) -> NDArray[complex]:
+
+def dft(sample: Iterable[float], N: int, harmonic: int = 1) -> NDArray[complex]:
     """
-    A function to filter a signal using discrete fourir transformation.
-    
-    The function it intended for analyzing a measured power system voltage 
-    or current. 
+    A function to filter a signal using discrete fourier transformation.
+
+    The function it intended for analyzing a measured power system voltage
+    or current.
     The filtering is done with a moving window of N samples, where only the
     specified harmonic component is kept. Each calculated point is a complex
     number x+1jy, where the magnitude is the RMS and the argument is the angle:
-    abs(x+1jy) = RMS / math.atan2(y, x) => angle. 
+    abs(x+1jy) = RMS / math.atan2(y, x) => angle.
     The initial windows is initialized with zeros.
     This yields len(sample) == len(result).
 
@@ -29,11 +29,11 @@ def dft(sample : Iterable[float], N : int, harmonic : int = 1) -> NDArray[comple
     sample : Iterable[float]
         Array with data to be filtered.
     N : int
-        Numper of samples for the dft window.
+        Number of samples for the dft window.
         For a one-cycle filter at 50Hz with a sampling rate of 1000Hz:
         N = int(50Hz/1000Hz) = 20
     harmonic : int, optional
-        Harmonic componet to be filtered, where 1 is the fundamental. 
+        Harmonic component to be filtered, where 1 is the fundamental.
         The default is 1.
 
     Returns
@@ -42,44 +42,45 @@ def dft(sample : Iterable[float], N : int, harmonic : int = 1) -> NDArray[comple
         Numpy array with the result.
 
     """
-    
-    result = np.empty(0) # Zero padding
-    
-    window = np.zeros(N) # Init of the window
-    
+
+    result = np.empty(0)  # Zero padding
+
+    window = np.zeros(N)  # Init of the window
+
     for value in sample:
-        window = np.append( window[1:N] , value)
-        
+        window = np.append(window[1:N], value)
+
         yff = fft(window)
-        
+
         component = yff[harmonic]
-        
-        component_rms = 2/N*component/np.sqrt(2)
-        
+
+        component_rms = 2 / N * component / np.sqrt(2)
+
         result = np.append(result, component_rms)
-    
+
     return result
 
-def true_rms(sample : Iterable[float], N : int):
+
+def true_rms(sample: Iterable[float], N: int):
     true_rms = np.empty(0)
-    window = np.zeros(N) # Init window
-    
+    window = np.zeros(N)  # Init window
+
     for value in sample:
-        window = np.append( window[1:N] , value)
-        true_rms = np.append(true_rms, np.sqrt(1/N*np.sum(window**2)))
-        
+        window = np.append(window[1:N], value)
+        true_rms = np.append(true_rms, np.sqrt(1 / N * np.sum(window**2)))
+
     return true_rms
 
 
 def reconstruct_signal(dft_output, N, harmonic=1):
     """
     Reconstruct the original signal from the DFT output.
-    
+
     Parameters:
         dft_output (array-like): The array of complex numbers (DFT output).
         N (int): Number of samples in one period of the fundamental.
         harmonic (int): The harmonic being used for reconstruction.
-    
+
     Returns:
         np.ndarray: The reconstructed signal.
     """
@@ -93,16 +94,19 @@ def reconstruct_signal(dft_output, N, harmonic=1):
         # Calculate the real and imaginary contributions for this harmonic
         amplitude = np.abs(component)  # Magnitude of the component
         phase = np.angle(component)  # Phase angle of the component
-        
+
         # Reconstruct the signal for one period
-        period_signal = 2**(1/2) * amplitude * np.cos(2 * np.pi * harmonic * t + phase)
-        
+        period_signal = (
+            2 ** (1 / 2) * amplitude * np.cos(2 * np.pi * harmonic * t + phase)
+        )
+
         # Append the period signal to the full reconstructed signal
-        reconstructed[i * N:(i + 1) * N] = period_signal
+        reconstructed[i * N : (i + 1) * N] = period_signal
 
     return reconstructed
 
-'''
+
+"""
 
 #To do
 #Bench mark wavewin/sigra
@@ -335,4 +339,4 @@ assert round(abs(IB_true_rms[x]), 3) == 151.210, 'Error cal dft true rms phase B
 assert round(abs(IC_true_rms[x]), 3) == 967.478, 'Error cal dft true rms phase C'
 
 
-'''
+"""

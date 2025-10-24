@@ -9,10 +9,19 @@ from math import cos, sin
 
 
 # Function more native to the embedded implementation without complex numbers.
-def R_Ph_E_emb(U:float, IL:float, IE:float, theta_U:float, theta_IL:float, theta_IE:float, RE_RL:float, XE_XL:float)-> float: 
-    '''
+def R_Ph_E_emb(
+    U: float,
+    IL: float,
+    IE: float,
+    theta_U: float,
+    theta_IL: float,
+    theta_IE: float,
+    RE_RL: float,
+    XE_XL: float,
+) -> float:
+    """
     Function to calculate the resistive part of the phase-earth loop impedance.
-    The function do not use complex numbers. 
+    The function do not use complex numbers.
     Reference: Gerhard Ziegler - "Numerical distance protection" page 104 (3-51)
 
     Parameters
@@ -39,16 +48,32 @@ def R_Ph_E_emb(U:float, IL:float, IE:float, theta_U:float, theta_IL:float, theta
     float
         Real/resistive part of the phase-earth impedance loop [Ohm].
 
-    '''
-    Rph_E = (U/IL) * ( (cos(theta_U - theta_IL) - IE/IL*XE_XL*cos(theta_U - theta_IE)) \
-                     / (1 - (XE_XL + RE_RL)*IE/IL*cos(theta_IE - theta_IL) + RE_RL*XE_XL*(IE/IL)**2) )
-    
+    """
+    Rph_E = (U / IL) * (
+        (cos(theta_U - theta_IL) - IE / IL * XE_XL * cos(theta_U - theta_IE))
+        / (
+            1
+            - (XE_XL + RE_RL) * IE / IL * cos(theta_IE - theta_IL)
+            + RE_RL * XE_XL * (IE / IL) ** 2
+        )
+    )
+
     return Rph_E
 
-def X_Ph_E_emb(U:float, IL:float, IE:float, theta_U:float, theta_IL:float, theta_IE:float, RE_RL:float, XE_XL:float)-> float: 
-    '''
+
+def X_Ph_E_emb(
+    U: float,
+    IL: float,
+    IE: float,
+    theta_U: float,
+    theta_IL: float,
+    theta_IE: float,
+    RE_RL: float,
+    XE_XL: float,
+) -> float:
+    """
     Function to calculate the reactive part of the phase-earth loop impedance.
-    The function do not use complex numbers. 
+    The function do not use complex numbers.
     Reference: Gerhard Ziegler - "Numerical distance protection" page 104 (3-52)
 
     Parameters
@@ -75,7 +100,13 @@ def X_Ph_E_emb(U:float, IL:float, IE:float, theta_U:float, theta_IL:float, theta
     float
         Imaginary/reactive part of the phase-earth impedance loop [Ohm].
 
-    '''
-    Xph_E = (U/IL) * ( (sin(theta_U - theta_IL) - IE/IL*RE_RL*sin(theta_U - theta_IE)) \
-                     / (1 - (XE_XL + RE_RL)*IE/IL*cos(theta_IE - theta_IL) + RE_RL*XE_XL*(IE/IL)**2) )
+    """
+    Xph_E = (U / IL) * (
+        (sin(theta_U - theta_IL) - IE / IL * RE_RL * sin(theta_U - theta_IE))
+        / (
+            1
+            - (XE_XL + RE_RL) * IE / IL * cos(theta_IE - theta_IL)
+            + RE_RL * XE_XL * (IE / IL) ** 2
+        )
+    )
     return Xph_E

@@ -12,3 +12,10 @@ dependencies = [
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "comtrade>=0.1.2",
+    "pytest>=8.4.2",
+    "ruff>=0.14.1",
+]
