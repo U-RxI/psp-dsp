@@ -61,7 +61,36 @@ def dft(sample: Iterable[float], N: int, harmonic: int = 1) -> NDArray[complex]:
     return result
 
 
-def true_rms(sample: Iterable[float], N: int):
+def true_rms(sample: Iterable[float], N: int) -> NDArray[float]:
+    """
+    Compute the true RMS of a signal using a moving window of N samples.
+
+    The function is intended for analyzing a measured power system voltage
+    or current. Unlike DFT filtering, true RMS includes all frequency
+    content in the window (fundamental, harmonics, and DC).
+
+    Each output point is:
+
+        RMS = sqrt(1/N * sum(window**2))
+
+    The initial window is initialized with zeros.
+    This yields len(sample) == len(result).
+
+    Parameters
+    ----------
+    sample : Iterable[float]
+        Array with data to be filtered.
+    N : int
+        Number of samples for the RMS window.
+        For a one-cycle window at 50 Hz with a sampling rate of 1000 Hz:
+        N = int(1000 Hz / 50 Hz) = 20
+
+    Returns
+    -------
+    result : NDArray[float]
+        Numpy array with the true RMS of each window.
+
+    """
     true_rms = np.empty(0)
     window = np.zeros(N)  # Init window
 
