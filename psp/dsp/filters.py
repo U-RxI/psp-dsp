@@ -82,8 +82,8 @@ def true_rms(sample: Iterable[float], N: int) -> NDArray[float]:
         Array with data to be filtered.
     N : int
         Number of samples for the RMS window.
-        For a one-cycle window at 50 Hz with a sampling rate of 1000 Hz:
-        N = int(1000 Hz / 50 Hz) = 20
+        For a one-cycle window at 50Hz with a sampling rate of 1000Hz:
+        N = int(50Hz/1000Hz) = 20
 
     Returns
     -------
