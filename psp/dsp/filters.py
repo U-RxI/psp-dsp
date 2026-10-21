@@ -15,13 +15,13 @@ def dft(sample: Iterable[float], N: int, harmonic: int = 1) -> NDArray[complex]:
     """
     A function to filter a signal using discrete fourier transformation.
 
-    The function it intended for analyzing a measured power system voltage
+    The function is intended for analyzing a measured power system voltage
     or current.
     The filtering is done with a moving window of N samples, where only the
     specified harmonic component is kept. Each calculated point is a complex
     number x+1jy, where the magnitude is the RMS and the argument is the angle:
     abs(x+1jy) = RMS / math.atan2(y, x) => angle.
-    The initial windows is initialized with zeros.
+    The initial window is initialized with zeros.
     This yields len(sample) == len(result).
 
     Parameters
@@ -31,7 +31,7 @@ def dft(sample: Iterable[float], N: int, harmonic: int = 1) -> NDArray[complex]:
     N : int
         Number of samples for the dft window.
         For a one-cycle filter at 50Hz with a sampling rate of 1000Hz:
-        N = int(50Hz/1000Hz) = 20
+        N = int(1000Hz/50Hz) = 20
     harmonic : int, optional
         Harmonic component to be filtered, where 1 is the fundamental.
         The default is 1.
@@ -83,7 +83,7 @@ def true_rms(sample: Iterable[float], N: int) -> NDArray[float]:
     N : int
         Number of samples for the RMS window.
         For a one-cycle window at 50Hz with a sampling rate of 1000Hz:
-        N = int(50Hz/1000Hz) = 20
+        N = int(1000Hz/50Hz) = 20
 
     Returns
     -------
